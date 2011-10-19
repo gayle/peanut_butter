@@ -1,2 +1,2 @@
-require './temp'
+require './schedule'
 run Sinatra::Application
