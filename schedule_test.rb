@@ -34,14 +34,17 @@ class ScheduleTest < Test::Unit::TestCase
     get '/?date=2011-10-19'
     assert last_response.ok?, "expected 200 response, got #{last_response.status}"
     assert_match /<event>/i, last_response.body
+    assert_match /Stick And Puck/i, last_response.body
+    assert_match /Learn to play Hockey/i, last_response.body
   end
 
-  def test_stick_and_puck_data
+  def test_stick_and_puck_data_only
     setup_flexmock_nokogiri_html_doc()
     get '/StickAndPuck?date=2011-10-19'
     assert last_response.ok?, "expected 200 response, got #{last_response.status}"
     assert_match /<event>/, last_response.body
     assert_match /Stick And Puck/i, last_response.body
+    assert_no_match /Learn to play Hockey/i, last_response.body
   end
 
 
