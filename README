@@ -9,21 +9,26 @@ http://chiller.heroku.com
 
 Get only Stick and Puck events on the schedule:
 http://chiller.heroku.com/StickAndPuck
+or
+http://chiller.heroku.com/?filter=stick and puck
 
 ==
 History and Future refactoring ideas:
 
 Originally I was only going to scrape the website for only "Stick and Puck" events.  When it got to the point of
 refactoring to filter out everything but Stick and Puck, I decided to leave the default get '/' to go ahead and
-get all events on the schedule.  Then I added a separate action /StickAndPuck to get those.  Eventual refactoring
-could lead to being able to pass a filter String in the query string parameters.
+get all events on the schedule.  Then I added a separate action /StickAndPuck to get those.  Further refactoring
+led to being able to pass a filter String in the query string parameters, for example: 
+http://chiller.heroku.com/?filter=stick and puck
 
 Originally I was not going to allow the user to input a date on the query string.  Then I came across a bug that
-only shows up after midnight, until the Chiller puts their data up for the next day.  For example: on 10/19/11
-the data was properly scraped for the 19th.  At 12:00 AM on 10/20/11 when you visit http://www.thechiller.com/rink-schedule
-it is still showing data for the 19th by default.  But the app tries to get data for Time.now which didn't work
-early morning on the 20th.  It was easiest to allow a query string date to be entered for these situations, then
-I didn't have to hardcode it when testing.  To use this go to http://chiller.heroku.com/?date=2011-10-20
+only shows up after midnight, and seems to last until 3am (suggesting perhaps their servers are in the PST time
+zone).  For example: on 10/19/11 the data was properly scraped for the 19th.  At 12:00 AM on 10/20/11 when you
+visit http://www.thechiller.com/rink-schedule it is still showing data for the 19th by default.  But the app
+tries to get data for Time.now which didn't work early morning on the 20th.  It was easiest to allow a query
+string date to be entered for these situations, then I didn't have to hardcode it when testing.  To use this go
+to http://chiller.heroku.com/?date=2011-10-20.  This change made testing easier, too. 
+
 I did not list this in the "usage" section above because it's misleading to think you could enter ANY date at all
 and get the schedule for that day.  Eventual refactoring could lead to being able to use the query string
 date parameter to change the date in the request to the schedule and get data for different dates (simulating

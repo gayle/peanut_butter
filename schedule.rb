@@ -9,7 +9,8 @@ DATE     = 2
 TIME     = 3
 
 get '/' do
-  get_schedule_for params["date"]
+  puts "DBG params=#{params.inspect}"
+  get_schedule_for params["date"], params["filter"]
 end
 
 get '/StickAndPuck' do

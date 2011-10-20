@@ -47,6 +47,14 @@ class ScheduleTest < Test::Unit::TestCase
     assert_no_match /Learn to play Hockey/i, last_response.body
   end
 
+  def test_filter_param
+    setup_flexmock_nokogiri_html_doc()
+    get '/?filter=learn%20to%20play&date=2011-10-19'
+    assert last_response.ok?, "expected 200 response, got #{last_response.status}"
+    assert_match /<event>/, last_response.body
+    assert_match /Learn to play Hockey/i, last_response.body
+    assert_no_match /Stick And Puck/i, last_response.body
+  end
 
   private
   
