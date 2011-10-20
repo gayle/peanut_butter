@@ -4,6 +4,17 @@ require 'open-uri'
 require 'builder'
 
 get '/' do
+  builder do |xml|
+    xml.instruct! :xml, :version => '1.0'
+    xml.schedule do
+      xml.event do
+        xml.name "Stick and Puck"
+        xml.location "Easton"
+        xml.date "10/19/2011"
+        xml.time "10am - 11am"
+      end
+    end
+  end
 #  today = Time.now.strftime("%Y-%m-%d")
 #  doc = Nokogiri::HTML(open('http://www.thechiller.com/rink-schedule'))
 #  rows = doc.css("tr[@class='#{today}']")
@@ -27,7 +38,5 @@ get '/' do
 #    output_str += "<br />-----"
 #  end
 #  output_str
-
-  builder :index
 
 end
