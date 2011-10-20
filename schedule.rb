@@ -3,40 +3,28 @@ require 'nokogiri'
 require 'open-uri'
 require 'builder'
 
+NAME     = 0
+LOCATION = 1
+DATE     = 2
+TIME     = 3
+
 get '/' do
+  today = Time.now.strftime("%Y-%m-%d")
+  doc   = Nokogiri::HTML(open('http://www.thechiller.com/rink-schedule'))
+  rows  = doc.css("tr[@class='#{today}']")
+
+  return "No events found for #{today}" if rows.empty?
   builder do |xml|
     xml.instruct! :xml, :version => '1.0'
     xml.schedule do
-      xml.event do
-        xml.name "Stick and Puck"
-        xml.location "Easton"
-        xml.date "10/19/2011"
-        xml.time "10am - 11am"
+      rows.each do |row|
+        xml.event do
+          xml.name row.children[NAME].content
+          xml.location row.children[LOCATION].content
+          xml.date row.children[DATE].content
+          xml.time row.children[TIME].content
+        end
       end
     end
   end
-#  today = Time.now.strftime("%Y-%m-%d")
-#  doc = Nokogiri::HTML(open('http://www.thechiller.com/rink-schedule'))
-#  rows = doc.css("tr[@class='#{today}']")
-#  rows_to_display = []
-#  rows.each do |r|
-#    puts "-----"
-#    r.children.each do |child|
-#      puts child.content
-#      if child.content.include?("Dublin 2")
-#        rows_to_display << r
-#      end
-#    end
-#  end
-#
-#  output_str = ""
-#  rows_to_display.each do |row|
-#    output_str += "<br />-----"
-#    row.children.each do |c|
-#      output_str += "<br />#{c.content}"
-#    end
-#    output_str += "<br />-----"
-#  end
-#  output_str
-
 end
