@@ -9,7 +9,6 @@ DATE     = 2
 TIME     = 3
 
 get '/' do
-  puts "DBG params=#{params.inspect}"
   get_schedule_for params["date"], params["filter"]
 end
 
@@ -20,7 +19,7 @@ end
 private
 def get_schedule_for(date, event_filter=nil)
   date ||= Time.now.strftime("%Y-%m-%d")
-  doc  = Nokogiri::HTML(open('http://www.thechiller.com/rink-schedule'))
+  doc  = Nokogiri::HTML(Kernel.open('http://www.thechiller.com/rink-schedule'))
   rows = doc.css("tr[@class='#{date}']")
 
   return "No events found for #{date}" if rows.empty?
