@@ -61,6 +61,7 @@ class ScheduleTest < Test::Unit::TestCase
   def setup_flexmock_nokogiri_html_doc
     doc = Nokogiri::HTML(html_source_for_test())
     assert_equal 63, doc.css('tr[@class = "2011-10-19"]').count, "this HTML should have 63 rows that match the date"
+    flexmock(Kernel).should_receive(:open).and_return(:open_uri)
     flexmock(Nokogiri).should_receive(:HTML).and_return(doc)
     doc
   end
